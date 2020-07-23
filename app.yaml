@@ -1,0 +1,5 @@
+runtime: python37
+
+# Change -w flag to number of workers based on GAE Instance Class
+# https://cloud.google.com/appengine/docs/standard/python3/runtime#entrypoint_best_practices
+entrypoint: gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker
