@@ -110,7 +110,7 @@
 
 
 </div>
-<a href="business.html">Are you a business?.</a>
+<a href="businesses.html">Add your Businesshere.</a>
 <p id="load">Firebase SDK Loading&hellip;</p>
 
 <script>
@@ -149,8 +149,7 @@
         const orderName = document.querySelector("#name");
         const saveButton = document.querySelector("#saveButton");
         saveButton.addEventListener("click", function () {
-            db.collection("orders").add({
-                business: 'docs_8PH2+XQ',
+            db.collection("businesses").doc('docs_8PH2+XQ').collection('orders').add({
                 number: orderNumber.value,
                 name: orderName.value
             }).then(function () {
@@ -159,6 +158,26 @@
                 console.log("got an error: ", error);
             });
         });
+
+        // const docRef = db.doc('businesses/docs_8PH2+XQ');
+        // docRef.get().then(function (querySnapshot) {
+        //     querySnapshot.forEach(function (doc) {
+        //         console.log("Order: " + doc.data().toString());
+        //     })
+        // });
+
+
+        getRealtimeUpdates = function () {
+            db.collection('orders').where('business', "==", 'docs_8PH2+XQ')
+                .onSnapshot(function (querySnapshot) {
+                    var orders = [];
+                    querySnapshot.forEach(function (doc) {
+                        orders.push(doc.data().number);
+                    });
+                    console.log("Order numbers: " + orders)
+                });
+        }
+        getRealtimeUpdates();
     });
 </script>
 </body>

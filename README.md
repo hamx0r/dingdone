@@ -4,6 +4,8 @@ DingDone.info lets you know when you're order is up
 
 Developing
 --
+Run with `firebase emulators:start`
+
 ### Backend
 https://fastapi.tiangolo.com/tutorial/debugging/
 https://fastapi.tiangolo.com/advanced/templates/
