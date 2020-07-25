@@ -2,10 +2,11 @@
 # Production run command: gunicorn main:app -w 1 --log-level debug -k uvicorn.workers.UvicornWorker
 # Dev run command `uvicorn main:app --reload --log-level debug`
 
-import logging
+import logging, colorlog
 import logging.config
-from fastapi import FastAPI
-
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
 
@@ -17,10 +18,6 @@ logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 log = logging.getLogger(__name__)  # the __name__ resolve to "main" since we are at the root of the project.
                                       # This will get the root logger since no logger in the configuration has this name.
 
-
-# log = logging.getLogger(__name__)
-# log.setLevel(logging.DEBUG)
-# log.addHandler(logging.StreamHandler())
 
 
 @app.get("/")

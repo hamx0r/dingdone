@@ -1,5 +1,6 @@
+colorlog
 fastapi
 uvicorn
 gunicorn
 jinja2
-aiofiles
+aiofiles  # for jinja2
