@@ -86,28 +86,19 @@
             }
         }
     </style>
+
+    <link rel="stylesheet" type="text/css" href="chcklist.css">
 </head>
 <body>
 <div id="message">
     <h2>DingDone!</h2>
-    <h1>Get notified when your order is done</h1>
+    <h1>Check off the Order when it's ready for picku</h1>
     <!--     TODO build form for user to input order, show list of nearby businesses and selecte the closest one
             TODO if geolocation is disabled, show contry/state/city picker, then list registered busineses https://www.w3schools.com/html/html5_geolocation.asp
             -->
-    <!--        <form id="orderform">-->
-    <label for="business">Business:</label>
-    <select name="business" id="business">
-        <option value="docs">Doc's Grill</option>
-        <option value="aw">A&W</option>
-        <option value="vintagepress">Vintage Press</option>
-    </select><br>
-    <label for="number">Order Number</label>
-    <input type="text" name="number" id="number"><br>
-    <label for="name">Name used on Order</label>
-    <input type="text" name="name" id="name">
-    <input type="submit" id="saveButton">
-    <!--        </form>-->
+    <ul id="orderList">
 
+    </ul>
 
 </div>
 <a href="businesses.html">Add your Businesshere.</a>
@@ -144,26 +135,19 @@
                 ssl: false
             });
         }
-        const business = document.querySelector("#business");
-        const orderNumber = document.querySelector("#number");
-        const orderName = document.querySelector("#name");
-        const saveButton = document.querySelector("#saveButton");
-        saveButton.addEventListener("click", function () {
-            db.collection("businesses").doc('docs_8PH2+XQ').collection('orders').add({
-                number: orderNumber.value,
-                name: orderName.value
-            }).then(function () {
-                console.log("saved order with number " + orderNumber.value);
-            }).catch(function (error) {
-                console.log("got an error: ", error);
-            });
-        });
+        const orderList = document.querySelector("#orderList");
 
-        // const docRef = db.doc('businesses/docs_8PH2+XQ');
-        // docRef.get().then(function (querySnapshot) {
-        //     querySnapshot.forEach(function (doc) {
-        //         console.log("Order: " + doc.data().toString());
-        //     })
+        // todo make this an event listener for when items are checked off
+        // TODO  https://www.w3schools.com/howto/howto_js_todolist.asp
+        // saveButton.addEventListener("click", function () {
+        //     db.collection("businesses").doc('docs_8PH2+XQ').collection('orders').add({
+        //         number: orderNumber.value,
+        //         name: orderName.value
+        //     }).then(function () {
+        //         console.log("saved order with number " + orderNumber.value);
+        //     }).catch(function (error) {
+        //         console.log("got an error: ", error);
+        //     });
         // });
 
 
@@ -172,10 +156,23 @@
                 .onSnapshot(function (querySnapshot) {
                     var orders = [];
                     querySnapshot.forEach(function (doc) {
-                        orders.push(doc.data().number);
+                        var order = doc.data()
+                        orders.push(order.number);
+                        // add order as check box item
+                        var li = document.createElement("li");
+                        li.appendChild(document.createTextNode(order.number + " " + order.name))
+                        orderList.appendChild(li)
+
                     });
                     console.log("Order numbers: " + orders)
                 });
+            // Add a "checked" symbol when clicking on a list item
+            var list = document.querySelector('ul');
+            list.addEventListener('click', function (ev) {
+                if (ev.target.tagName === 'LI') {
+                    ev.target.classList.toggle('checked');
+                }
+            }, false);
         }
         getRealtimeUpdates();
     });
