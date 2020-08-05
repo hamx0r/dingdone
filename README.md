@@ -21,7 +21,10 @@ After running locally, visit http://localhost:5000 .  This is built on the Fireb
 
 Alternately, see the main.py file for a possibly Python 3 Fast API method (abandoned?)
 
-
+Each order has 3 `status` phases:
+1. Open - it means a customer as registered their order and the row is currently unchecked on the Business's UI
+2. Ready - means order is ready for pickup.  This means Order row has been checked which causes alert to be sent to Customer
+3. Closed - means order has been picked up.    
 
 
 Phase 2: QR codes, image recognition

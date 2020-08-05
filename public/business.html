@@ -167,13 +167,16 @@
 
         for (i = 0; i < close.length; i++) {
             close[i].onclick = function () {
-                var div = this.parentElement;
-                div.style.display = "none";
+
+                // The below is just visual.  We'll do this by removing record from Firebase
+                //var div = this.parentElement;
+                //div.style.display = "none";
+
             }
         }
 
         getRealtimeUpdates = function () {
-            db.collection('orders').where('business', "==", 'docs_8PH2+XQ').orderBy('created')
+            db.collection('orders').where('business', "==", 'docs_8PH2+XQ').where('status', '<', 3).orderBy('status').orderBy('created', 'desc')
                 .onSnapshot(function (querySnapshot) {
                     // Remove all existing elements first since we'll redraw them all
                     orderList.innerHTML = "";

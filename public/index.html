@@ -153,6 +153,7 @@
                 business: 'docs_8PH2+XQ',
                 number: orderNumber.value,
                 name: orderName.value,
+                status: 1,
                 created: firebase.database.ServerValue.TIMESTAMP
             }).then(function () {
                 console.log("saved order with number " + orderNumber.value);
