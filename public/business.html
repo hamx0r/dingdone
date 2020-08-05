@@ -92,7 +92,7 @@
 <body>
 <div id="message">
     <h2>DingDone!</h2>
-    <h1>Check off the Order when it's ready for picku</h1>
+    <h1>Check off the Order when it's ready for pickup</h1>
     <!--     TODO build form for user to input order, show list of nearby businesses and selecte the closest one
             TODO if geolocation is disabled, show contry/state/city picker, then list registered busineses https://www.w3schools.com/html/html5_geolocation.asp
             -->
@@ -136,6 +136,7 @@
             });
         }
         const orderList = document.querySelector("#orderList");
+        // const orderList = document.getElementById("orderList");
 
         // todo make this an event listener for when items are checked off
         // TODO  https://www.w3schools.com/howto/howto_js_todolist.asp
@@ -150,6 +151,26 @@
         //     });
         // });
 
+        // Create a "close" button and append it to each list item
+        var myNodelist = document.getElementsByTagName("LI");
+        var i;
+        for (i = 0; i < myNodelist.length; i++) {
+            var span = document.createElement("SPAN");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "close";
+            span.appendChild(txt);
+            myNodelist[i].appendChild(span);
+        }
+
+        // Click on a close button to hide the current list item
+        var close = document.getElementsByClassName("close");
+
+        for (i = 0; i < close.length; i++) {
+            close[i].onclick = function () {
+                var div = this.parentElement;
+                div.style.display = "none";
+            }
+        }
 
         getRealtimeUpdates = function () {
             db.collection('orders').where('business', "==", 'docs_8PH2+XQ')
@@ -162,6 +183,18 @@
                         var li = document.createElement("li");
                         li.appendChild(document.createTextNode(order.number + " " + order.name))
                         orderList.appendChild(li)
+                        var span = document.createElement("SPAN");
+                        var txt = document.createTextNode("\u00D7");
+                        span.className = "close";
+                        span.appendChild(txt);
+                        li.appendChild(span);
+
+                        for (i = 0; i < close.length; i++) {
+                            close[i].onclick = function () {
+                                var div = this.parentElement;
+                                div.style.display = "none";
+                            }
+                        }
 
                     });
                     console.log("Order numbers: " + orders)

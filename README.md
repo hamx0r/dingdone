@@ -17,6 +17,11 @@ https://www.muicss.com/docs/v1/example-layouts/blog
 
 Phase 1: Web Page only
 --
+After running locally, visit http://localhost:5000 .  This is built on the Firebase App method.
+
+Alternately, see the main.py file for a possibly Python 3 Fast API method (abandoned?)
+
+
 
 
 Phase 2: QR codes, image recognition
