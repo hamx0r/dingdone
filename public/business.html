@@ -173,8 +173,11 @@
         }
 
         getRealtimeUpdates = function () {
-            db.collection('orders').where('business', "==", 'docs_8PH2+XQ')
+            db.collection('orders').where('business', "==", 'docs_8PH2+XQ').orderBy('created')
                 .onSnapshot(function (querySnapshot) {
+                    // Remove all existing elements first since we'll redraw them all
+                    orderList.innerHTML = "";
+
                     var orders = [];
                     querySnapshot.forEach(function (doc) {
                         var order = doc.data()

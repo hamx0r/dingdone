@@ -9,7 +9,7 @@
     <script defer src="/__/firebase/7.17.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/7.17.1/firebase-auth.js"></script>
-    <!--    <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>-->
+        <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>
     <script defer src="/__/firebase/7.17.1/firebase-firestore.js"></script>
     <!--    <script defer src="/__/firebase/7.17.1/firebase-messaging.js"></script>-->
     <!--    <script defer src="/__/firebase/7.17.1/firebase-storage.js"></script>-->
@@ -152,7 +152,8 @@
             db.collection("orders").add({
                 business: 'docs_8PH2+XQ',
                 number: orderNumber.value,
-                name: orderName.value
+                name: orderName.value,
+                created: firebase.database.ServerValue.TIMESTAMP
             }).then(function () {
                 console.log("saved order with number " + orderNumber.value);
             }).catch(function (error) {
