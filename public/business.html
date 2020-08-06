@@ -167,8 +167,8 @@
                         var li = document.createElement("li");
                         li.appendChild(document.createTextNode(order.number + " " + order.name))
                         li.id = doc.id;
-                        if (order.status == 2){
-                             li.className = 'checked';
+                        if (order.status == 2) {
+                            li.className = 'checked';
                         }
                         orderList.appendChild(li)
                         var span = document.createElement("SPAN");
@@ -185,11 +185,6 @@
                                     status: 3,
                                     completed: firebase.database.ServerValue.TIMESTAMP
                                 }, {merge: true})
-
-
-                                // The below is just visual.  We'll do this by removing record from Firebase
-                                // var div = this.parentElement;
-                                // div.style.display = "none";
                             }
                         }
 
