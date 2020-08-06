@@ -9,7 +9,7 @@
     <script defer src="/__/firebase/7.17.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/7.17.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>
+<!--    <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>-->
     <script defer src="/__/firebase/7.17.1/firebase-firestore.js"></script>
     <!--    <script defer src="/__/firebase/7.17.1/firebase-messaging.js"></script>-->
     <!--    <script defer src="/__/firebase/7.17.1/firebase-storage.js"></script>-->
@@ -154,7 +154,7 @@
         // see .onSnapshot code for where these elements are manipulated
 
         getRealtimeUpdates = function () {
-            db.collection('orders').where('business', "==", 'docs_8PH2+XQ').where('status', '<', 3).orderBy('status').orderBy('created', 'desc')
+            db.collection('orders').where('business', "==", 'docs_8PH2+XQ').where('status', '<', 3).orderBy('status').orderBy('created', 'asc')
                 .onSnapshot(function (querySnapshot) {
                     // Remove all existing elements first since we'll redraw them all
                     orderList.innerHTML = "";
@@ -183,7 +183,7 @@
                                 console.log('Closing order with ID ' + id)
                                 db.collection('orders').doc(id).set({
                                     status: 3,
-                                    completed: firebase.database.ServerValue.TIMESTAMP
+                                    completed: firebase.firestore.Timestamp.now()
                                 }, {merge: true})
                             }
                         }
@@ -205,7 +205,7 @@
                     console.log('Setting status to ' + status + ' for order with ID ' + id)
                     db.collection('orders').doc(id).set({
                         status: status,
-                        alerted: firebase.database.ServerValue.TIMESTAMP
+                        alerted: firebase.firestore.Timestamp.now()
                     }, {merge: true})
                 }
             }, false);

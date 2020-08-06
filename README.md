@@ -6,6 +6,10 @@ Developing
 --
 Run with `firebase emulators:start`
 
+Deploying
+--
+`firebase deploy`
+
 ### Backend
 https://fastapi.tiangolo.com/tutorial/debugging/
 https://fastapi.tiangolo.com/advanced/templates/
