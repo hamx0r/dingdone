@@ -9,7 +9,7 @@
     <script defer src="/__/firebase/7.17.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/7.17.1/firebase-auth.js"></script>
-        <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>
     <script defer src="/__/firebase/7.17.1/firebase-firestore.js"></script>
     <!--    <script defer src="/__/firebase/7.17.1/firebase-messaging.js"></script>-->
     <!--    <script defer src="/__/firebase/7.17.1/firebase-storage.js"></script>-->
@@ -114,6 +114,7 @@
 <p id="load">Firebase SDK Loading&hellip;</p>
 
 <script>
+    Notification.requestPermission();
     document.addEventListener('DOMContentLoaded', function () {
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
@@ -137,6 +138,7 @@
 
         // DingDone code
         var db = firebase.firestore();
+        var waitingOrders = [];
         if (location.hostname === "localhost") {
             console.log("usingDB settings for: " + location.hostname);
             db.settings({
@@ -155,12 +157,55 @@
                 name: orderName.value,
                 status: 1,
                 created: firebase.database.ServerValue.TIMESTAMP
-            }).then(function () {
-                console.log("saved order with number " + orderNumber.value);
+            }).then(docRef => {
+                // console.log("saved order with number " + orderNumber.value + " and ID  " + docRef.id);
+                waitingOrders.push(docRef.id);
+                getRealtimeUpdates();
+                // console.log("Waiting for orders " + waitingOrders);
             }).catch(function (error) {
                 console.log("got an error: ", error);
             });
         });
+
+        // Alert user when order is ready
+        function notifyMe(number, name) {
+            var msg = "Ding Done!  Order #" + number + " for " + name + " is ready for pickup!";
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+                console.log("This browser does not support desktop notification");
+            }
+
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                var notification = new Notification(msg);
+            }
+
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        var notification = new Notification(msg);
+                    }
+                });
+            }
+
+            // At last, if the user has denied notifications, and you
+            // want to be respectful there is no need to bother them any more.
+        }
+
+        getRealtimeUpdates = function () {
+            if (waitingOrders.length > 0) {
+                db.collection('orders').where(firebase.firestore.FieldPath.documentId(), "in", waitingOrders).where('status', '==', 2)
+                    .onSnapshot(function (querySnapshot) {
+                        querySnapshot.forEach(function (doc) {
+                            var order = doc.data()
+                            notifyMe(order.number, order.name);
+                        });
+                    });
+            }
+        }
     });
 </script>
 </body>
