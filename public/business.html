@@ -210,7 +210,7 @@
                     console.log('Setting status to ' + status + ' for order with ID ' + id)
                     db.collection('orders').doc(id).set({
                         status: status,
-                        completed: firebase.database.ServerValue.TIMESTAMP
+                        alerted: firebase.database.ServerValue.TIMESTAMP
                     }, {merge: true})
                 }
             }, false);
