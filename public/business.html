@@ -9,7 +9,7 @@
     <script defer src="/__/firebase/7.17.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/7.17.1/firebase-auth.js"></script>
-        <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.17.1/firebase-database.js"></script>
     <script defer src="/__/firebase/7.17.1/firebase-firestore.js"></script>
     <!--    <script defer src="/__/firebase/7.17.1/firebase-messaging.js"></script>-->
     <!--    <script defer src="/__/firebase/7.17.1/firebase-storage.js"></script>-->
@@ -138,19 +138,6 @@
         const orderList = document.querySelector("#orderList");
         // const orderList = document.getElementById("orderList");
 
-        // todo make this an event listener for when items are checked off
-        // TODO  https://www.w3schools.com/howto/howto_js_todolist.asp
-        // saveButton.addEventListener("click", function () {
-        //     db.collection("businesses").doc('docs_8PH2+XQ').collection('orders').add({
-        //         number: orderNumber.value,
-        //         name: orderName.value
-        //     }).then(function () {
-        //         console.log("saved order with number " + orderNumber.value);
-        //     }).catch(function (error) {
-        //         console.log("got an error: ", error);
-        //     });
-        // });
-
         // Create a "close" button and append it to each list item
         var myNodelist = document.getElementsByTagName("LI");
         var i;
@@ -164,15 +151,7 @@
 
         // Click on a close button to hide the current list item
         var close = document.getElementsByClassName("close");
-
-        // for (i = 0; i < close.length; i++) {
-        //     close[i].onclick = function () {
-        //
-        //         //var div = this.parentElement;
-        //         //div.style.display = "none";
-        //
-        //     }
-        // }
+        // see .onSnapshot code for where these elements are manipulated
 
         getRealtimeUpdates = function () {
             db.collection('orders').where('business', "==", 'docs_8PH2+XQ').where('status', '<', 3).orderBy('status').orderBy('created', 'desc')
@@ -188,6 +167,9 @@
                         var li = document.createElement("li");
                         li.appendChild(document.createTextNode(order.number + " " + order.name))
                         li.id = doc.id;
+                        if (order.status == 2){
+                             li.className = 'checked';
+                        }
                         orderList.appendChild(li)
                         var span = document.createElement("SPAN");
                         var txt = document.createTextNode("\u00D7");
@@ -200,9 +182,9 @@
                                 var id = this.parentElement.getAttribute('id');
                                 console.log('Closing order with ID ' + id)
                                 db.collection('orders').doc(id).set({
-                                    status:3,
+                                    status: 3,
                                     completed: firebase.database.ServerValue.TIMESTAMP
-                                }, { merge: true })
+                                }, {merge: true})
 
 
                                 // The below is just visual.  We'll do this by removing record from Firebase
@@ -212,13 +194,24 @@
                         }
 
                     });
-                    console.log("Order numbers: " + orders)
                 });
             // Add a "checked" symbol when clicking on a list item
             var list = document.querySelector('ul');
             list.addEventListener('click', function (ev) {
                 if (ev.target.tagName === 'LI') {
                     ev.target.classList.toggle('checked');
+                    // Update Firestore accordingly
+                    console.log("Checkbox state: " + ev.target.classList.contains('checked'));
+                    var status = 1;
+                    if (ev.target.classList.contains('checked')) {
+                        status = 2;
+                    }
+                    var id = ev.target.getAttribute('id');
+                    console.log('Setting status to ' + status + ' for order with ID ' + id)
+                    db.collection('orders').doc(id).set({
+                        status: status,
+                        completed: firebase.database.ServerValue.TIMESTAMP
+                    }, {merge: true})
                 }
             }, false);
         }
