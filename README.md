@@ -4,7 +4,10 @@ DingDone.info lets you know when you're order is up
 
 Developing
 --
-Run with `firebase emulators:start`
+If running a pure Firebase web app (doesn't work on most mobile browsers), run with `firebase emulators:start`
+
+If running FastAPI with static frontend, first run Firestore emulator with `gcloud beta emulators firestore start --project test --host-port "localhost:8001"`
+
 
 Deploying
 --
@@ -13,6 +16,8 @@ Deploying
 ### Backend
 https://fastapi.tiangolo.com/tutorial/debugging/
 https://fastapi.tiangolo.com/advanced/templates/
+
+
 
 ### Frontend
 https://classpert.com/blog/top-bootstrap-alternatives

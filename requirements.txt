@@ -4,3 +4,7 @@ uvicorn
 gunicorn
 jinja2
 aiofiles  # for jinja2
+google-cloud-firestore
+typing
+pydantic
+mock  # To run with firestore emulator locally
