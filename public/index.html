@@ -181,6 +181,9 @@
               //   { "action": "no", "title": "No", "icon": "images/no.png" }
               // ]
             }
+            let src = 'https://dingdone.app/dingdone.mp3';
+            let audio = new Audio(src);
+
             // Let's check if the browser supports notifications
             if (!("Notification" in window)) {
                 alert("This browser does not support desktop notification");
@@ -190,8 +193,9 @@
             else if (Notification.permission === "granted") {
                 // If it's okay let's create a notification
                 // TODO use showNotification() options to make more DingDoney
-                // ServiceWorkerRegistration.showNotification(msg, options);
-                var notification = new Notification(msg)
+                // ServiceWorkerRegistration.showNotification(msg, options);  // Needs service worker implemented
+                // var notification = new Notification(msg)  // won't work on Android Chrome
+                audio.play();
             }
 
             // Otherwise, we need to ask the user for permission
@@ -199,8 +203,10 @@
                 Notification.requestPermission().then(function (permission) {
                     // If the user accepts, let's create a notification
                     if (permission === "granted") {
+                        // TODO re-implment up notifications
                         // ServiceWorkerRegistration.showNotification(msg, options);
-                        var notification = new Notification(msg)
+                        // var notification = new Notification(msg)
+                        audio.play();
                     }
                 });
             }
