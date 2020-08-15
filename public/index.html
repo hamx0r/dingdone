@@ -131,7 +131,7 @@
             let features = ['auth', 'database', 'messaging', 'storage', 'firestore'].filter(feature => typeof app[feature] === 'function');
             document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
-            console.error(e);
+            alert(e);
             document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
 
@@ -140,7 +140,7 @@
         var db = firebase.firestore();
         var waitingOrders = [];
         if (location.hostname === "localhost") {
-            console.log("usingDB settings for: " + location.hostname);
+            alert("usingDB settings for: " + location.hostname);
             db.settings({
                 host: "localhost:8080",
                 ssl: false
@@ -158,27 +158,40 @@
                 status: 1,
                 created: firebase.firestore.Timestamp.now()
             }).then(docRef => {
-                // console.log("saved order with number " + orderNumber.value + " and ID  " + docRef.id);
+                alert("saved order with number " + orderNumber.value + " and ID  " + docRef.id);
                 waitingOrders.push(docRef.id);
                 getRealtimeUpdates();
                 // console.log("Waiting for orders " + waitingOrders);
             }).catch(function (error) {
-                console.log("got an error: ", error);
+                alert("got an error: ", error);
             });
         });
 
         // Alert user when order is ready
         function notifyMe(number, name) {
+            navigator.serviceWorker.register('sw.js');
             var msg = "Ding Done!  Order #" + number + " for " + name + " is ready for pickup!";
+            var options = {
+              "body": msg,
+               "icon": "/dingdone.jpg",
+              "vibrate": [200, 100, 200, 100, 200, 100, 400],
+              "tag": "request",
+              // "actions": [
+              //   { "action": "yes", "title": "Yes", "icon": "images/yes.png" },
+              //   { "action": "no", "title": "No", "icon": "images/no.png" }
+              // ]
+            }
             // Let's check if the browser supports notifications
             if (!("Notification" in window)) {
-                console.log("This browser does not support desktop notification");
+                alert("This browser does not support desktop notification");
             }
 
             // Let's check whether notification permissions have already been granted
             else if (Notification.permission === "granted") {
                 // If it's okay let's create a notification
-                var notification = new Notification(msg);
+                // TODO use showNotification() options to make more DingDoney
+                // ServiceWorkerRegistration.showNotification(msg, options);
+                var notification = new Notification(msg)
             }
 
             // Otherwise, we need to ask the user for permission
@@ -186,7 +199,8 @@
                 Notification.requestPermission().then(function (permission) {
                     // If the user accepts, let's create a notification
                     if (permission === "granted") {
-                        var notification = new Notification(msg);
+                        // ServiceWorkerRegistration.showNotification(msg, options);
+                        var notification = new Notification(msg)
                     }
                 });
             }
